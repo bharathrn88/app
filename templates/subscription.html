@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Prime Subscription</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: black;
+            color: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('https://via.placeholder.com/1600x900'); /* Replace with actual background image */
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 2rem;
+            color: #232f3e;
+        }
+        .header p {
+            font-size: 1rem;
+            color: #555;
+        }
+        .plan-selection {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .plan {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 45%;
+            transition: background-color 0.3s ease;
+        }
+        .plan:hover {
+            background-color: #f0e6a0;
+        }
+        .plan h2 {
+            font-size: 1.5rem;
+            color: #232f3e;
+            margin-bottom: 10px;
+        }
+        .plan p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        .plan button {
+            padding: 10px 20px;
+            background: #ff9900;
+            border: none;
+            color: #101010;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .plan button:hover {
+            background: #e68a00;
+        }
+        .payment-methods {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .payment-methods label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .payment-methods select, .payment-methods input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .payment-methods input:focus, .payment-methods select:focus {
+            border-color: #ff9900;
+            outline: none;
+        }
+        .error {
+            color: #d9534f;
+            font-size: 0.85rem;
+            display: none;
+            margin-bottom: 15px;
+        }
+        .subscribe-btn {
+            padding: 12px 20px;
+            background: #ff9900;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .subscribe-btn:hover {
+            background: #e68a00;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://via.placeholder.com/150x50?text=Amazon+Prime" alt="Amazon Prime Logo">
+            <h1>Choose Your Amazon Prime Plan</h1>
+            <p>Enjoy unlimited access to movies, TV shows, and more with Amazon Prime.</p>
+        </div>
+
+        <!-- Plan Selection Section -->
+        <div class="plan-selection">
+            <div class="plan">
+                <h2>Monthly Plan</h2>
+                <p>₹179/month</p>
+                <button onclick="selectPlan('monthly')">Select</button>
+            </div>
+            <div class="plan">
+                <h2>Yearly Plan</h2>
+                <p>₹1499/year</p>
+                <button onclick="selectPlan('yearly')">Select</button>
+            </div>
+        </div>
+
+        <!-- Payment Method Section -->
+        <div class="payment-methods">
+            <h3>Select Payment Method</h3>
+            <label for="payment-method">Payment Method</label>
+            <select id="payment-method" onchange="showPaymentDetails()">
+                <option value="credit">Credit/Debit Card</option>
+                <option value="upi">UPI (Unified Payments Interface)</option>
+                <option value="netbanking">Net Banking</option>
+            </select>
+            <div id="payment-details">
+                <label for="card-number" id="card-label">Card Number</label>
+                <input type="text" id="card-number" placeholder="Enter your card number" required>
+                <label for="expiry-date" id="expiry-label">Expiry Date (MM/YY)</label>
+                <input type="text" id="expiry-date" placeholder="MM/YY" required>
+                <label for="cvv" id="cvv-label">CVV</label>
+                <input type="text" id="cvv" placeholder="CVV" required>
+            </div>
+            <div id="upi-details" style="display:none;">
+                <label for="upi-id">Enter your UPI ID</label>
+                <input type="text" id="upi-id" placeholder="example@upi" required>
+            </div>
+            <div id="netbanking-details" style="display:none;">
+                <label for="bank-name">Select Your Bank</label>
+                <select id="bank-name">
+                    <option value="bank1">HDFC Bank</option>
+                    <option value="bank2">SBI Bank</option>
+                    <option value="bank3">ICICI Bank</option>
+                </select>
+            </div>
+            <p class="error" id="errorMessage"></p>
+            <button class="subscribe-btn" onclick="subscribe()">Subscribe Now</button>
+        </div>
+
+        <footer>
+            &copy; 2024 Amazon. All rights reserved. Privacy Notice | Terms of Use | Help
+        </footer>
+    </div>
+
+    <script>
+        let selectedPlan = null;
+
+        function selectPlan(plan) {
+            selectedPlan = plan;
+            // Change button styles or add more features here if needed
+            document.querySelectorAll('.plan button').forEach((btn) => {
+                btn.style.backgroundColor = '#ff9900';
+                btn.style.color = '#fff';
+            });
+            event.target.style.backgroundColor = '#e68a00';
+            event.target.style.color = '#fff';
+        }
+
+        function showPaymentDetails() {
+            const paymentMethod = document.getElementById('payment-method').value;
+            document.getElementById('payment-details').style.display = paymentMethod === 'credit' ? 'block' : 'none';
+            document.getElementById('upi-details').style.display = paymentMethod === 'upi' ? 'block' : 'none';
+            document.getElementById('netbanking-details').style.display = paymentMethod === 'netbanking' ? 'block' : 'none';
+        }
+
+        function subscribe() {
+            const cardNumber = document.getElementById('card-number').value.trim();
+            const expiryDate = document.getElementById('expiry-date').value.trim();
+            const cvv = document.getElementById('cvv').value.trim();
+            const upiId = document.getElementById('upi-id').value.trim();
+            const bankName = document.getElementById('bank-name').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Clear previous error message
+            errorMessage.style.display = 'none';
+
+            if (!selectedPlan) {
+                errorMessage.textContent = 'Please select a subscription plan.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (paymentMethod === 'credit') {
+                if (!cardNumber || !expiryDate || !cvv) {
+                    errorMessage.textContent = 'Please fill out all payment details for Credit/Debit Card.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                if (cardNumber.length < 16 || isNaN(cardNumber)) {
+                    errorMessage.textContent = 'Invalid card number.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                if (expiryDate.length !== 5 || !expiryDate.includes('/')) {
+                    errorMessage.textContent = 'Invalid expiry date format.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                if (cvv.length !== 3 || isNaN(cvv)) {
+                    errorMessage.textContent = 'Invalid CVV.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+            }
+
+            if (paymentMethod === 'upi' && !upiId) {
+                errorMessage.textContent = 'Please enter your UPI ID.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (paymentMethod === 'netbanking' && bankName === '') {
+                errorMessage.textContent = 'Please select your bank for Net Banking.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Simulate successful subscription
+            alert('Subscription successful! Enjoy Amazon Prime.');
+        }
+    </script>
+</body>
+</html>
